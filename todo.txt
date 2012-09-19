@@ -1,0 +1,35 @@
++ Marketplace
+	- Add
+	- Edit
+	- Delete
+	- View
+	- List
++ Outline Database
++ Rate Professors
+	- New Rating
+	- List
+	- View
+
++ Liaisons
+	- Edit my organizations
+	- Request SGA grant (not now)
+
++ Admin > Manage MME
+	- Pending items approve / delete / edit / override
+	- All items approve / delete / edit / override
+	- Create issue
+	- View issues
+
++ User
+	- Edit my info
+	- Forgot my password
+	- Forgot my username
+
+
+Hey Folliesband has openings for all parts - guitar, bass, drums, keys (maybe), vocals, didgeridoo, tabla...
+
+Auditions: 
+Thursday (9/20) 4:00 - 6:30pm
+Friday (9/21) 2:00 - 4:30pm
+
+E-mail bufolliesband@gmail.com now. Send questions, as well as what part / song you are planning to play for us.

@@ -1,0 +1,1 @@
+<?php $issue->format_html(); ?>

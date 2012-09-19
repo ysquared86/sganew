@@ -1,0 +1,1 @@
+<?php echo anchor('/docs/', 'Document 1', 'title = "Document Title" target="_blank"'); ?>

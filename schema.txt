@@ -1,0 +1,31 @@
+Home
+
+Events
++-- Calendar
++-- Bar Review
+
+Student Resources
++-- Marketplace
++-- Outline Database
++-- Rate Professors
++-- Student Organizations List
+
+MME
++-- This Week (date - date)
++-- Archives
++-- Submit to MME
+
+SGA
++-- About Us
++-- Office Hours
++-- SGA Documents
++-- BU Law Merchandise
+
+SGA Liaison (Liaisons Only)
++-- Edit Group Listing
++-- Request SGA Grant
+
+Admin
++-- Manage Users
++-- Manage MME
++-- Liaisons

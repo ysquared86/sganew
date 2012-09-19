@@ -1,0 +1,1 @@
+<p>Successfully signed up! <a href="<?php echo site_url(); ?>login">Login</a></p>
