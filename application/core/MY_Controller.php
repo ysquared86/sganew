@@ -88,5 +88,37 @@ class MY_Controller extends CI_Controller {
 		}
 		return $arr;
 	}
+	
+	public function profs_array( $blank = true ) {
+		// professors for a dropdown
+		if( $blank ) { $arr = array( '' => '-------------' ); }
+		$this->db->order_by('lastname');
+		$profs = $this->db->get('professors')->result();
+		foreach($profs as $prof) {
+			$arr[$prof->id] = $prof->lastname . ', ' . $prof->firstname;
+		}
+		return $arr;
+	}
+	
+	public function courses_array( $blank = true ) {
+		// courses for a dropdown
+		if( $blank ) { $arr = array( '' => '-------------' ); }
+		$this->db->order_by('course_title');
+		$courses = $this->db->get('courses')->result();
+		foreach($courses as $course) {
+			$arr[$course->id] = $course->course_number . ' - ' . $course->course_title;
+		}
+		return $arr;
+	}
+	
+	public function years_array( $blank = true ) {
+		// years for a dropdown
+		$arr = array();
+		if( $blank ) { $arr = array( '' => '----' ); }
+		for($i = 2012; $i > 1999; $i--) {
+			$arr[$i] = $i;
+		}
+		return $arr;
+	}
 }
 ?>

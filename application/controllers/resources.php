@@ -53,12 +53,25 @@ class Resources extends MY_Controller {
 		$config["uri_segment"] = 4;
 		$config["num_links"] = round($config["total_rows"] / $config["per_page"]);
 		
-		$this->pagination->initialize($config);
-		
 		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
-		if($action == 'all') {
+		
+		if($action == 'all')
+		{
+			$this->session->unset_userdata('search_post');
 			$data["results"] = $this->Outlines->fetch_outlines($config["per_page"], $page);
-		} elseif($action == 'search') {
+			$this->pagination->initialize($config);
+			$data["page_links"] = $this->pagination->create_links();
+			
+			$data['title'] = 'BU Law SGA | Resources | Outline Database';
+			$data['heading'] = 'Outline Database';
+			
+			$this->load->view('header', $data);
+			$this->load->view('outlines', $data);
+			$this->load->view('footer', $data);
+		}
+		
+		elseif($action == 'search')
+		{
 			if($this->input->post()) {
 				$this->session->set_userdata('search_post', $this->input->post());
 			} elseif(!($this->session->userdata('search_post'))) {
@@ -66,15 +79,58 @@ class Resources extends MY_Controller {
 				redirect('resources/outlines/all');
 			}
 			$data["results"] = $this->Outlines->search_outlines($this->session->userdata('search_post'), $config["per_page"], $page);
-		}
-		$data["page_links"] = $this->pagination->create_links();
+			$config['total_rows'] = count($data["results"]);
+			$config["num_links"] = round($config["total_rows"] / $config["per_page"]);
+			
+			$this->pagination->initialize($config);
+			$data["page_links"] = $this->pagination->create_links();
+
+			$data['title'] = 'BU Law SGA | Resources | Outline Database | Search Results';
+			$data['heading'] = 'Outline Database - Search Results';
+
+			$this->load->view('header', $data);
+			$this->load->view('outlines', $data);
+			$this->load->view('footer', $data);
+		} 
 		
-		$data['title'] = 'BU Law SGA | Resources | Outline Database';
-		$data['heading'] = 'Outline Database';
+		elseif($action == 'upload')
+		{	
+			$data['title'] = 'BU Law SGA | Resources | Upload Outlines';
+			$data['heading'] = 'Upload Outlines';
+			$data['courses'] = $this->courses_array( false );
+			$data['profs'] = $this->profs_array( false );
+			$data['years'] = $this->years_array();
+			
+			$this->load->view('header', $data);
 		
-		$this->load->view('header', $data);
-		$this->load->view('outlines', $data);
-		$this->load->view('footer', $data);
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('course_id', 'Course', 'required');
+			$this->form_validation->set_rules('professor_id', 'Instructor', 'required');
+			$this->form_validation->set_rules('semester', 'Semester', 'required');
+			$this->form_validation->set_rules('year', 'Year', 'required');
+			
+			if($this->form_validation->run() == false) 
+			{				
+				$this->load->view('outlines_upload', $data);
+			} 
+			else 
+			{
+				// do the insert
+				$insert_result = $this->Outlines->insert_outline( $this->input->post() );
+				// then redirect
+				if(is_array($insert_result))
+				{
+					$this->session->set_flashdata('flash', 'Your outline was successfully uploaded. The administrator will review and approve your outline.');
+					redirect('resources/outlines');
+				}
+				else
+				{
+					var_dump($insert_result);
+				}
+			}
+			
+			$this->load->view('footer', $data);
+		}		
 	}
 }
 
