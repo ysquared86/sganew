@@ -125,6 +125,32 @@ class Admin extends MY_Controller {
 		$this->load->view('footer', $data);
 	}
 	
+	public function manage_outlines() {
+		$this->load->model('Outlines');		
+		$this->load->library('pagination');
+		
+		$config = array();
+		$config['base_url'] = site_url() . 'admin/manage_outlines';
+		$config['total_rows'] = $this->Outlines->outlines_count();
+		$config['per_page'] = 40;		
+		$config["uri_segment"] = 3;
+		$config["num_links"] = round($config["total_rows"] / $config["per_page"]);
+
+		$this->pagination->initialize($config);
+		
+		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		$data["results"] = $this->Outlines->fetch_outlines($config["per_page"], $page);
+		$data["pending"] = $this->Outlines->fetch_pending_outlines();
+		$data["page_links"] = $this->pagination->create_links();
+		
+		$data['title'] = 'BU Law SGA | Admin | Manage Outlines';
+		$data['heading'] = 'Manage Outlines';
+		
+		$this->load->view('header', $data);
+		$this->load->view('manage_outlines', $data);
+		$this->load->view('footer', $data);
+	}
+	
 	public function liaisons() {
 		$this->load->model('Liaisons');
 		
@@ -165,7 +191,6 @@ class Admin extends MY_Controller {
 			} //endforeach
 			redirect('admin/liaisons');
 		} //end function
-	
 	
 }
 ?>

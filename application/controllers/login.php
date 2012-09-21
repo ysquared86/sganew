@@ -41,7 +41,7 @@ class Login extends MY_Controller {
 			redirect($this->input->post('url'));
 		} else {
 			$this->session->set_userdata('after_login', $this->input->post('url'));
-			redirect( '/login' );
+			redirect( 'login' );
 		}
 	}
 	

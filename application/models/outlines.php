@@ -5,6 +5,10 @@ class Outlines extends CI_Model
         parent::__construct();
     }
     
+    public function outlines_count() {
+        return $this->db->count_all('outlines');
+    }
+    
     public function fetch_outlines($limit = null, $start = null) {
 		$this->db->select('outlines.*, courses.course_number, courses.course_title, users.firstname, users.lastname, users.username, professors.lastname as instructor');
 		$this->db->from('outlines');
@@ -17,6 +21,24 @@ class Outlines extends CI_Model
 			$this->db->limit($limit, $start);
 		}
 		
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+        return false;
+   }
+   
+   
+    
+    public function fetch_pending_outlines() {
+	$this->db->select('outlines.*, courses.course_number, courses.course_title, users.firstname, users.lastname, users.username, professors.lastname as instructor');
+	$this->db->from('outlines');
+	$this->db->join('users', 'outlines.user_id = users.id', 'left');
+	$this->db->join('courses', 'outlines.course_id = courses.id', 'left');
+	$this->db->join('professors', 'outlines.professor_id = professors.id', 'left');
+	$this->db->where('outlines.pending', 'Y');
+	$this->db->order_by('created', 'desc');
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {

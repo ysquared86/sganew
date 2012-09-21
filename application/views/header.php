@@ -52,6 +52,7 @@
 								<ul>
 									<li><a href="<?php echo site_url(); ?>admin/manage_users">Manage Users</a></li>
 									<li><a href="#">Manage MME</a></li>
+									<li><a href="<?php echo site_url(); ?>admin/manage_outlines">Manage Outlines</a></li>
 									<li><a href="<?php echo site_url(); ?>admin/manage_orgs">Manage Organizations</a></li>
 									<li><a href="<?php echo site_url(); ?>admin/liaisons">Liaisons</a></li>
 								</ul>

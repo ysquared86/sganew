@@ -105,7 +105,7 @@ class Resources extends MY_Controller {
 		
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('course_id', 'Course', 'required');
-			$this->form_validation->set_rules('professor_id', 'Instructor', 'required');
+			$this->form_validation->set_rules('professor_id', 'Instructor', '');
 			$this->form_validation->set_rules('semester', 'Semester', 'required');
 			$this->form_validation->set_rules('year', 'Year', 'required');
 			
