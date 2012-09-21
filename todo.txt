@@ -4,7 +4,6 @@
 	- Delete
 	- View
 	- List
-+ Outline Database
 + Rate Professors
 	- New Rating
 	- List
@@ -19,6 +18,8 @@
 	- All items approve / delete / edit / override
 	- Create issue
 	- View issues
++ Admin > Manage Outlines
+	- Delete outlines
 
 + User
 	- Edit my info

@@ -131,6 +131,38 @@ class Resources extends MY_Controller {
 			
 			$this->load->view('footer', $data);
 		}		
+	} // end function
+	
+	public function prof_ratings( $action = 'all', $prof_id = null ) {
+		$this->check_registered_user();
+		
+		$this->load->model('Professor_ratings');
+		if( $action == 'all' )
+		{
+			$data['title'] = 'BU Law SGA | Resources | Professor Ratings';
+			$data['heading'] = 'Professor Ratings';
+			$this->load->view('header', $data);
+			$this->load->view('prof_ratings', $data);
+		}
+		
+		elseif( $action == 'view' )
+		{
+			$data['ratings'] = $this->Professor_ratings->get_ratings_for( $prof_id );
+			$data['courses'] = $this->courses_array();
+			$data['years'] = $this->years_array();
+			
+			$data['title'] = 'BU Law SGA | Resources | Professor Ratings';
+			$data['heading'] = 'Professor Ratings - ' . $data['ratings']->firstname . ' ' . $data['ratings']->lastname;
+			$this->load->view('header', $data);
+			$this->load->view('prof_ratings_view', $data);
+		}
+		
+		elseif( $action == 'add' )
+		{
+			$this->Professor_ratings->check_rating_exists( $this->session->userdata('user')->id ); // WRITE THIS FUNCTION... needs course/professor id
+		}
+		
+		$this->load->view('footer', $data);
 	}
 }
 

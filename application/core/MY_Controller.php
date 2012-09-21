@@ -120,5 +120,13 @@ class MY_Controller extends CI_Controller {
 		}
 		return $arr;
 	}
+	
+	/* ACCESS CONTROL */
+	public function check_registered_user() {
+		if(!$this->logged_in()) {
+			$this->session->set_userdata('after_login', current_url());
+			redirect('home/access_denied');
+		}
+	}
 }
 ?>

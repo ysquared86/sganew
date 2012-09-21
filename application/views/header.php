@@ -25,7 +25,7 @@
 									<li><a href="http://www.youngjyoon.com" target="_blank">Bar Review</a></li>
 									<li><a href="<?php echo site_url(); ?>resources/marketplace">Marketplace</a></li>
 									<li><a href="<?php echo site_url(); ?>resources/outlines">Outline Database</a></li>
-									<li><a href="<?php echo site_url(); ?>resources/rate_prof">Rate Professors</a></li>
+									<li><a href="<?php echo site_url(); ?>resources/prof_ratings">Professor Ratings</a></li>
 									<li><a href="<?php echo site_url(); ?>resources/student_orgs">Student Organizations List</a></li>
 								</ul>
 							</li>
