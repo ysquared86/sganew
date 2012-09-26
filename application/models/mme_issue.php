@@ -353,5 +353,21 @@
 			return $temparray;
 			//return $this->entries;
 		}
+		
+		public function fetch_all_issues( $limit = null, $start = null )
+		{
+			$this->db->select('*')->from('mme_issues');
+			$this->db->order_by('firstmonday', 'desc');
+			if(isset($limit) && isset($start)) {
+				$this->db->limit($limit, $start);
+			}
+			$result = $this->db->get()->result();
+			return $result;
+		}
+	
+		public function issues_count()
+		{
+			return $this->db->count_all('mme_issues');
+		}
 	}
 ?>

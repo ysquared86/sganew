@@ -2,7 +2,7 @@
 	echo anchor('resources/prof_ratings', 'Back to Ratings List', 'class="button"');
 	echo form_open('resources/prof_ratings/add', array( 'class' => 'sga-form' ));
 ?>
-	<div class="ratings-left">
+	<div id="ratings-left">
 		<table class="ratings-table">
 			<tr>
 				<th>Professor was...</th>
@@ -52,7 +52,7 @@
 		
 		<?php 
 			echo form_label('Class', 'class');
-			echo form_dropdown('class', $courses, set_value('class'));
+			echo form_dropdown('course_id', $courses, set_value('course_id'));
 			
 			echo form_label('Semester', 'semester');
 			echo form_dropdown('semester', array('Fall' => 'Fall', 'Spring' => 'Spring'), set_value('semester'));
@@ -69,4 +69,46 @@
 		?>
 
 	</div>
-<?php var_dump($ratings); ?>
+	
+	<div id="ratings-right">
+		<div id="ratings-numbers">
+			<div class="ratings-box" style="background: <?php echo $ratings->overall_rgb; ?>">
+				<h3>Overall</h3>
+				<p><?php echo $ratings->overall_avg; ?></p>
+			</div>
+			<div class="ratings-box" style="background: <?php echo $ratings->helpful_rgb; ?>">
+				<h3>Helpful</h3>
+				<p><?php echo $ratings->helpful_avg; ?></p>
+			</div>
+			<div class="ratings-box" style="background: <?php echo $ratings->clear_rgb; ?>">
+				<h3>Clear</h3>
+				<p><?php echo $ratings->clear_avg; ?></p>
+			</div>
+			<div class="ratings-box" style="background: <?php echo $ratings->easy_rgb; ?>">
+				<h3>Easy</h3>
+				<p><?php echo $ratings->easy_avg; ?></p>
+			</div>
+		</div><!-- .ratings-numbers -->
+		
+		<div id="ratings-comments">
+			<?php 
+				if($comments) {
+					foreach($comments as $comment) { ?>
+					<div class="ratings-comment">
+						<h4>Class: <?php echo $comment->course_title; ?> (<?php echo $comment->semester . ' ' . $comment->year; ?>)</h4>
+						<p><?php echo $comment->comments; ?></p>
+						<p class="ratings-comment-meta">Reviewed: <?php echo date('F d, Y', $comment->created) . ' at ' . date('g:i a', $comment->created); ?></p>
+					</div>
+			<?php 
+					} //endforeach 
+				} //endif 
+				else {
+			?>
+					<div class="ratings-comment">
+						<p>There are no comments for this professor.</p>
+					</div>
+			<?php
+				}
+			?>
+		</div>
+	</div>

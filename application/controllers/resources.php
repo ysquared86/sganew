@@ -135,12 +135,12 @@ class Resources extends MY_Controller {
 	
 	public function prof_ratings( $action = 'all', $prof_id = null ) {
 		$this->check_registered_user();
-		
 		$this->load->model('Professor_ratings');
 		if( $action == 'all' )
 		{
 			$data['title'] = 'BU Law SGA | Resources | Professor Ratings';
 			$data['heading'] = 'Professor Ratings';
+			$data['ratings'] = $this->Professor_ratings->get_all_ratings( $this->profs_array( false) );
 			$this->load->view('header', $data);
 			$this->load->view('prof_ratings', $data);
 		}
@@ -148,6 +148,7 @@ class Resources extends MY_Controller {
 		elseif( $action == 'view' )
 		{
 			$data['ratings'] = $this->Professor_ratings->get_ratings_for( $prof_id );
+			$data['comments'] = $this->Professor_ratings->get_comments_for( $prof_id );
 			$data['courses'] = $this->courses_array();
 			$data['years'] = $this->years_array();
 			
@@ -159,7 +160,26 @@ class Resources extends MY_Controller {
 		
 		elseif( $action == 'add' )
 		{
-			$this->Professor_ratings->check_rating_exists( $this->session->userdata('user')->id ); // WRITE THIS FUNCTION... needs course/professor id
+			if(!$this->input->post()) { redirect('resources/prof_ratings'); }
+			else {
+				if(	$this->Professor_ratings->check_rating_exists( $this->session->userdata('user')->id, $this->input->post() ) ) {
+					$data['title'] = 'BU Law SGA | Resources | Professor Ratings';
+					$data['heading'] = 'Repeat Ratings';
+					$data['prof_id'] = $this->input->post('professor_id');
+					$this->load->view('header', $data);
+					$this->load->view('prof_ratings_failure', $data);
+				}
+				else {
+					// we're all good for insert
+					$this->Professor_ratings->insert_rating( $this->session->userdata('user')->id, $this->input->post() );
+					
+					$data['title'] = 'BU Law SGA | Resources | Professor Ratings | Success';
+					$data['heading'] = 'Rating Submitted';
+					$data['prof_id'] = $this->input->post('professor_id');
+					$this->load->view('header', $data);
+					$this->load->view('prof_ratings_success', $data);
+				}
+			}
 		}
 		
 		$this->load->view('footer', $data);

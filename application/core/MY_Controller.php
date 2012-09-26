@@ -12,6 +12,8 @@ class MY_Controller extends CI_Controller {
 		
 		$this->session->set_userdata('latest_mme_date', date('Y/m/d', $last_mme[0]->firstmonday));
 		$this->session->set_userdata('nav_items', $this->nav_items());
+		
+		date_default_timezone_set('America/New_York');
 	}
 	
 	public function logged_in() {
@@ -119,6 +121,17 @@ class MY_Controller extends CI_Controller {
 			$arr[$i] = $i;
 		}
 		return $arr;
+	}
+	
+	public function class_array() {
+		return array(
+			'2013' => '2013',
+			'2014' => '2014',
+			'2015' => '2015',
+			'llm' => 'LLM',
+			'faculty' => 'Faculty/Staff',
+			'alumni' => 'Alumni'
+		);
 	}
 	
 	/* ACCESS CONTROL */

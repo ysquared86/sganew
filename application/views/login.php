@@ -13,3 +13,6 @@
 	echo form_submit('submit', 'Login');
 	echo form_close();
 ?>
+
+<p>Forgot your password? <?php echo anchor('login/forget_pw', 'Click here.'); ?></p>
+<p>Forgot your username? <?php echo anchor('login/forget_username', 'Click here.'); ?></p>

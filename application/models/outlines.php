@@ -32,19 +32,19 @@ class Outlines extends CI_Model
    
     
     public function fetch_pending_outlines() {
-	$this->db->select('outlines.*, courses.course_number, courses.course_title, users.firstname, users.lastname, users.username, professors.lastname as instructor');
-	$this->db->from('outlines');
-	$this->db->join('users', 'outlines.user_id = users.id', 'left');
-	$this->db->join('courses', 'outlines.course_id = courses.id', 'left');
-	$this->db->join('professors', 'outlines.professor_id = professors.id', 'left');
-	$this->db->where('outlines.pending', 'Y');
-	$this->db->order_by('created', 'desc');
-        $query = $this->db->get();
+		$this->db->select('outlines.*, courses.course_number, courses.course_title, users.firstname, users.lastname, users.username, professors.lastname as instructor');
+		$this->db->from('outlines');
+		$this->db->join('users', 'outlines.user_id = users.id', 'left');
+		$this->db->join('courses', 'outlines.course_id = courses.id', 'left');
+		$this->db->join('professors', 'outlines.professor_id = professors.id', 'left');
+		$this->db->where('outlines.pending', 'Y');
+		$this->db->order_by('created', 'desc');
+		$query = $this->db->get();
 
-        if ($query->num_rows() > 0) {
-            return $query->result();
-        }
-        return false;
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		}
+		return false;
    }
    
    public function search_outlines($post, $limit = null, $start = null) {
@@ -86,6 +86,7 @@ class Outlines extends CI_Model
 			'year' => $post['year'],
 			'user_id' => $post['user_id'],
 			'path' => $filename,
+			'pending' => 'Y',
 			'created' => time()
 		);
 		
@@ -105,6 +106,14 @@ class Outlines extends CI_Model
 			$this->db->insert('outlines', $outline);
 			return $this->upload->data();
 		}
+   }
+   
+   public function delete_outline( $id ) {
+		$this->db->delete('outlines', array('id' => $id));
+   }
+   
+   public function approve_outline( $id ) {
+		$this->db->update('outlines', array('pending' => 'N'), array('id' => $id));
    }
 }
 ?>

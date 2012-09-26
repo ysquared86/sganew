@@ -9,6 +9,8 @@ class Admin extends MY_Controller {
 		}
 	}
 	
+/* USERS
+=========================================================================================*/
 	public function manage_users() {
 		$this->load->model('Users');		
 		$this->load->library('pagination');
@@ -50,6 +52,7 @@ class Admin extends MY_Controller {
 		$data['title'] = 'BU Law SGA | Admin | Edit User';
 		$data['heading'] = 'Edit User';
 		$data['edit_user'] = $this->Users->get_user($user_id, true);
+		$data['class_arr'] = $this->class_array();
 		
 		// these are defined in the my_controller
 		$data['orgs'] = $this->orgs_array(); 
@@ -83,6 +86,8 @@ class Admin extends MY_Controller {
 			redirect('admin/manage_users');
 		}
 	
+/* ORGANIZATIONS
+=========================================================================================*/
 	public function manage_orgs() {	
 		$this->load->model('Organizations');		
 		$this->load->library('pagination');
@@ -125,6 +130,8 @@ class Admin extends MY_Controller {
 		$this->load->view('footer', $data);
 	}
 	
+/* OUTLINES
+=========================================================================================*/
 	public function manage_outlines() {
 		$this->load->model('Outlines');		
 		$this->load->library('pagination');
@@ -151,6 +158,20 @@ class Admin extends MY_Controller {
 		$this->load->view('footer', $data);
 	}
 	
+	public function delete_outline( $outline_id ) {
+		$this->load->model('Outlines');
+		$this->Outlines->delete_outline( $outline_id );
+		redirect('admin/manage_outlines');
+	}
+	
+	public function approve_outline( $outline_id ) {
+		$this->load->model('Outlines');
+		$this->Outlines->approve_outline( $outline_id );
+		redirect('admin/manage_outlines');
+	}
+	
+/* LIAISONS
+=========================================================================================*/
 	public function liaisons() {
 		$this->load->model('Liaisons');
 		
@@ -168,29 +189,170 @@ class Admin extends MY_Controller {
 		$this->load->view('liaisons', $data);
 		$this->load->view('footer', $data);
 	}
-		public function liaisons_process() {
-			$this->load->model('Liaisons');
-			$liaison_role = $this->Liaisons->role_id();
+	public function liaisons_process() {
+		$this->load->model('Liaisons');
+		$liaison_role = $this->Liaisons->role_id();
+		
+		foreach( $this->input->post() as $id => $liaison_id ) {
+			// take off liaison_
+			$id_arr = explode('_', $id);
+			$id = $id_arr[1];
 			
-			foreach( $this->input->post() as $id => $liaison_id ) {
-				// take off liaison_
-				$id_arr = explode('_', $id);
-				$id = $id_arr[1];
-				
-				if( $liaison_id != '' && isset($id) ) {
-					// only insert if liaison is set
-					$this->Liaisons->update_org_liaison( $id, $liaison_id );
-				} elseif( $liaison_id == '' ) {
-					// if liaison has been made blank, delete
-					$arr = array(
-						'organization_id' => $id,
-						'role_id' => $liaison_role
-					);
-					$this->db->delete('users_orgs_roles', $arr);
-				}
-			} //endforeach
-			redirect('admin/liaisons');
-		} //end function
+			if( $liaison_id != '' && isset($id) ) {
+				// only insert if liaison is set
+				$this->Liaisons->update_org_liaison( $id, $liaison_id );
+			} elseif( $liaison_id == '' ) {
+				// if liaison has been made blank, delete
+				$arr = array(
+					'organization_id' => $id,
+					'role_id' => $liaison_role
+				);
+				$this->db->delete('users_orgs_roles', $arr);
+			}
+		} //endforeach
+		redirect('admin/liaisons');
+	} //end function
 	
+/* MME
+=========================================================================================*/
+	public function manage_mmes( $action = 'view' )
+	{
+		$this->load->model('Mme_issues');
+		if( $action == 'view' )
+		{
+			// admin/manage_mmes/view
+			$data['title'] = 'BU Law SGA | Admin | MME Issues';
+			$data['heading'] = 'Manage MME Issues';
+			
+			$this->load->library('pagination');
+		
+			$config = array();
+			$config['base_url'] = site_url() . 'admin/manage_mmes/view/';
+			$config['total_rows'] = $this->Mme_issues->issues_count();
+			$config['per_page'] = 40;		
+			$config["uri_segment"] = 4;
+			$config["num_links"] = round($config["total_rows"] / $config["per_page"]);
+
+			$this->pagination->initialize($config);
+			
+			$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			$data["issues"] = $this->Mme_issues->fetch_all_issues($config["per_page"], $page);
+			$data["page_links"] = $this->pagination->create_links();
+			
+			$this->load->view('header', $data);
+			$this->load->view('mme_archives_admin', $data);
+		}
+		elseif( $action == 'create' )
+		{
+			// admin/manage_mmes/create
+			$this->load->library('form_validation');
+			
+			$this->form_validation->set_rules('firstmonday', 'First Monday', 'required|callback_check_mme_range');
+			$this->form_validation->set_rules('secondmonday', 'Second Monday', 'required');
+			$this->form_validation->set_rules('lastday', 'Last Day', 'required');
+			
+			if($this->form_validation->run() == false)
+			{
+				$data['title'] = 'BU Law SGA | Admin | Create MME Issue';
+				$data['heading'] = 'Create a new issue of the MME';
+			
+				$this->load->view('header', $data);
+				$this->load->view('create_mme_issue', $data);
+			}
+			else
+			{
+				// Validated. Success!
+				$new_issue_id = $this->Mme_issues->insert_issue( $this->input->post() );
+				redirect('admin/single_issue/'.$new_issue_id);
+			}
+		}
+		elseif( $action == 'overrides' )
+		{
+			// admin/manage_mmes/overrides
+		}
+		
+		$this->load->view('footer', $data);
+	}
+	
+	public function single_issue( $id )
+	{
+		// admin/single_issue/id
+		if( !isset($id) ) { redirect('admin/manage_mmes'); }
+		$this->load->model('Mme_issues');
+		
+		$data['issue'] = $this->Mme_issues->get_issue_by_id( $id, true );
+		$data['title'] = 'BU Law SGA | Admin | View Single MME Issue';
+		$data['heading'] = 'View Single MME Issue - Week of ' . date('F d, Y', $data['issue']->firstmonday);
+		
+		$this->session->set_userdata('redirect_url', current_url());
+		
+		$this->load->view('header', $data);
+		$this->load->view('single_issue_admin', $data);
+		$this->load->view('footer', $data);
+	}
+	
+	public function delete_issue( $id )
+	{
+		// admin/delete_issue/id
+		if( !isset($id) ) { redirect('admin/manage_mmes'); }
+		$this->load->model('Mme_issues');
+		
+		$this->Mme_issues->delete_issue( $id );
+		$this->session->set_flashdata('flash', 'Issue '.$id.' was successfully deleted.');
+		redirect('admin/manage_mmes/view');
+	}
+	
+	public function publish_issue( $id )
+	{
+		// admin/publish_issue/id
+		if( !isset($id) ) { redirect('admin/manage_mmes'); }
+		$this->load->model('Mme_issues');		
+		$this->Mme_issues->publish_issue( $id );
+		$this->session->set_flashdata('flash', 'Issue '.$id.' was successfully published.');
+		
+		$nexturl = ($this->session->userdata('redirect_url')) ? $this->session->userdata('redirect_url') : 'admin/manage_mmes';
+		$this->session->unset_userdata('redirect_url');
+		redirect( $nexturl );
+	}
+	
+	public function unpublish_issue( $id )
+	{
+		// admin/publish_issue/id
+		if( !isset($id) ) { redirect('admin/manage_mmes'); }
+		$this->load->model('Mme_issues');		
+		$this->Mme_issues->unpublish_issue( $id );
+		$this->session->set_flashdata('flash', 'Issue '.$id.' has been pulled from publication.');
+		
+		$nexturl = ($this->session->userdata('redirect_url')) ? $this->session->userdata('redirect_url') : 'admin/manage_mmes';
+		$this->session->unset_userdata('redirect_url');
+		redirect( $nexturl );
+	}
+	
+	public function delete_submission( $id )
+	{
+		// admin/delete_submission/id
+		if( !isset($id) ) { redirect('admin/manage_mmes'); }
+		$this->load->model('Mme_issues');
+		
+		$this->Mme_issues->delete_entry( $id );
+		$this->session->set_flashdata('flash', 'Entry '.$id.' was successfully deleted.');
+		
+		$nexturl = ($this->session->userdata('redirect_url')) ? $this->session->userdata('redirect_url') : 'admin/manage_mmes';
+		$this->session->unset_userdata('redirect_url');
+		redirect( $nexturl );
+	}
+	
+	public function approve_submission( $id )
+	{
+		// admin/delete_submission/id
+		if( !isset($id) ) { redirect('admin/manage_mmes'); }
+		$this->load->model('Mme_issues');		
+		$this->Mme_issues->approve_entry( $id );
+		$this->session->set_flashdata('flash', 'Entry '.$id.' was approved.');
+		
+		$nexturl = ($this->session->userdata('redirect_url')) ? $this->session->userdata('redirect_url') : 'admin/manage_mmes';
+		$this->session->unset_userdata('redirect_url');
+		redirect( $nexturl );
+	}
 }
 ?>

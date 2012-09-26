@@ -64,6 +64,7 @@ body {
 	width: 100%;
 	top: 0;
 	left: 0;
+	z-index: 99;
 }
 	#header h1 {
 		display: inline-block;
@@ -169,15 +170,67 @@ h4.mme-heading {
 	font-size: 150%;
 	text-align: center;
 }
+
+div.mme-entry { position: relative; }
 h5.mme-title {
 	font-size: 100%;
-	display: inline-block;
-	margin: 0 0 1em;
+	display: block;
+	margin: -100px 0 1em;
+	padding-top: 100px;
+}
+	a.back-to-top {
+		position: absolute;
+		top: 100px;
+		right: 1em;
+	}
+
+p#top {
+	margin-top: -100px;
+	padding-top: 100px;
 }
 
 td.mme-details-label {
 	width: 100px;
 }
+
+div.mme-admin-pub {
+	width: 900px;
+	border-radius: 15px 15px 0 0;
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	margin-left: -450px;
+	text-align: center;
+	font-size: 15px;
+}
+
+div.published {
+	background: #006600;
+	color: #FFF;
+}
+
+div.unpublished {
+	background: #FF3300;
+	color: #FFF;
+}
+
+div.mme-admin-meta {
+	position: absolute;
+	top: 100px;
+	right: 0;
+	padding: 0.2em 0.5em;
+}
+	div.mme-admin-meta a {
+		text-decoration: none;
+		color: #FFF;
+	}
+	div.mme-admin-meta a:hover {
+		text-decoration: underline;
+		font-weight: bold;
+	}
+
+/* FORMS
+----------------------------- */
 
 form.sga-form {
 	padding: 1em;

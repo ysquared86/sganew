@@ -22,6 +22,25 @@ class Home extends MY_Controller {
 		$this->load->view('access_denied', $data);
 		$this->load->view('footer', $data);
 	}
+	
+	public function my_account() {
+		$this->load->model('Users');
+		
+		$data['title'] = 'BU Law SGA | My Account';
+		$data['heading'] = 'My Account';
+		$data['edit_user'] = $this->session->userdata('user');
+		$data['class_arr'] = $this->class_array();
+		
+		$this->load->view('header', $data);
+		
+		if($this->input->post())
+		{
+			$this->Users->update_my_account( $this->input->post() );
+			$this->session->set_flashdata('flash', 'Your account was successfully updated.');
+		}
+		$this->load->view('edit_my_account', $data);		
+		$this->load->view('footer', $data);
+	}
 }
 
 ?>

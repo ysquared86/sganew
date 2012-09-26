@@ -52,7 +52,8 @@
         <th>Instructor</th>
         <th>Semester</th>
         <th>Year</th>
-        <th>Action</th>
+        <th>Link</th>
+        <th>Uploaded</th>
     </tr>
 <?php
     $i = 0;
@@ -65,7 +66,8 @@
         <td><?php echo $outline->instructor; ?></td>
         <td><?php echo $outline->semester; ?></td>
         <td><?php echo $outline->year; ?></td>
-        <td><?php echo anchor( site_url() . 'uploads/outlines/' . $outline->path . '.pdf', 'View', 'class="outline-download" target="_blank"') . ' | ' . anchor(site_url() . 'admin/delete_outline/' . $outline->id, 'Delete'); ?></td>
+        <td><?php echo anchor( site_url() . 'uploads/outlines/' . $outline->path . '.pdf', 'Download', 'class="outline-download" target="_blank"'); ?></td>
+        <td><?php echo date('Y-m-d', $outline->created) . ' by ' . $outline->firstname . ' ' . $outline->lastname; ?></td>
     </tr>
 <?php
         $i++;

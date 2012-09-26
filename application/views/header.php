@@ -17,6 +17,7 @@
 									<li><a href="<?php echo site_url(); ?>mme/">This Week (<?php echo $this->session->userdata('latest_mme_date'); ?>)</a></li>
 									<li><a href="<?php echo site_url(); ?>mme/archives">Archives</a></li>
 									<li><a href="<?php echo site_url(); ?>mme/submit">Submit to MME</a></li>
+									<li><a href="<?php echo site_url(); ?>mme/my_submissions">My MME Submissions</a></li>
 								</ul>
 							</li>
 							<li><a>Student Resources</a>
@@ -51,7 +52,7 @@
 							<li><a>Admin</a>
 								<ul>
 									<li><a href="<?php echo site_url(); ?>admin/manage_users">Manage Users</a></li>
-									<li><a href="#">Manage MME</a></li>
+									<li><a href="<?php echo site_url(); ?>admin/manage_mmes">Manage MME</a></li>
 									<li><a href="<?php echo site_url(); ?>admin/manage_outlines">Manage Outlines</a></li>
 									<li><a href="<?php echo site_url(); ?>admin/manage_orgs">Manage Organizations</a></li>
 									<li><a href="<?php echo site_url(); ?>admin/liaisons">Liaisons</a></li>
@@ -64,7 +65,7 @@
 					<div id="login">
 						<?php
 							if($this->session->userdata('user')) { ?>
-								Welcome, <strong><?php echo $this->session->userdata('user')->firstname; ?></strong>!
+								Welcome, <strong><?php echo anchor('home/my_account', $this->session->userdata('user')->firstname); ?></strong>!
 							<?php
 								echo form_open('login/logout', array('class' => 'login-form'));
 								echo form_hidden('url', current_url());
@@ -79,7 +80,7 @@
 								echo form_hidden('url', current_url());
 								echo form_submit('submit', 'Login');
 								echo form_close();
-								echo ' | '. anchor('login/signup', 'Sign Up for an Account', 'class = "signup"');
+								echo anchor('login/signup', 'Sign Up for an Account', 'class = "signup"') . ' | Forget your ' . anchor('login/forget_pw', 'password') . ' or ' . anchor('login/forget_username', 'username') . '?' ;
 							}
 						?>
 					</div>

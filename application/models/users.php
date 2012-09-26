@@ -46,6 +46,14 @@ class Users extends CI_Model
 		return $user;
    }
    
+   public function get_username_by_email( $email ) {
+		$result = $this->db->get_where('users', array('email' => $email), 1)->result();
+		if(!empty($result)) {
+			return $result[0]->username;
+		}
+		return false;
+   }
+   
    public function update_user($post, $extras = null) {
 		$arr = array(
 			'firstname' => $post['firstname'],
@@ -67,6 +75,18 @@ class Users extends CI_Model
 		return $liaison_arr;
    }
    
+   public function update_my_account( $post ) {
+		$arr = array(
+			'firstname' => $post['firstname'],
+			'lastname' => $post['lastname'],
+			'email_pref' => $post['email_pref'],
+			'phone' => $post['phone'],
+			'class' => $post['class']
+		);
+		$this->db->where( 'id', $post['id'] );
+		$this->db->update( 'users', $arr );
+   }
+   
    public function delete_user($user_id) {
 		$this->db->delete('users', array('id' => $user_id));
 		$this->db->delete('users_orgs_roles', array('user_id' => $user_id));
@@ -75,6 +95,25 @@ class Users extends CI_Model
    
    public function get_class($fromdb) {
 		return $this->class_arr[$fromdb];
+   }
+   
+   public function get_my_orgs( $user_id, $blank = true ) {
+		$arr = array();
+		if($blank) { $arr['NULL'] = '--------------'; }
+		
+		// a user can submit on behalf of an organization if he is the liaison
+		$this->db->select('o.*');
+		$this->db->from('users_orgs_roles uor');
+		$this->db->join('organizations o', 'uor.organization_id = o.id', 'left');
+		$this->db->join('roles r', 'uor.role_id = r.id', 'left');
+		$this->db->where('r.role', 'SGA Liaison');
+		$this->db->where('uor.user_id', $user_id);
+		$orgs = $this->db->get()->result();
+		
+		foreach($orgs as $org) {
+			$arr[$org->id] = $org->name;
+		}
+		return $arr;
    }
 }
 ?>

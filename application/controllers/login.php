@@ -120,7 +120,6 @@ class Login extends MY_Controller {
 				return false;
 			}
 		}
-		/*
 		public function check_email($str) {
 			// Check for repeat email
 			$this->db->from('users');
@@ -132,7 +131,7 @@ class Login extends MY_Controller {
 				return false;
 			}
 		}
-		*/
+		
 		public function check_bu($str) {
 			// Make sure one of the e-mail
 			$email1 = explode('@', $str);
@@ -143,6 +142,29 @@ class Login extends MY_Controller {
 				$this->form_validation->set_message('check_bu', 'One of your e-mail addresses must be a BU e-mail.');
 				return false;
 			}
+		}
+		
+		public function forget_pw( $action = null ) {
+			
+		}
+		
+		public function forget_username() {
+			$this->load->model('Users');
+			$data['title'] = 'BU Law SGA | Retrieve Username';
+			$data['heading'] = 'Retrieve Your Username';
+			if($this->input->post()) {
+				$username = $this->Users->get_username_by_email( $this->input->post('email') );
+				if($username) {
+					$data['string'] = 'Your username is: ' . $username;
+				} else {
+					$data['string'] = 'Your e-mail address is not on our database. Please ' . anchor('login/signup', 'sign up for an account');
+				}
+			} else {
+				$data['string'] = '';
+			}			
+			$this->load->view('header', $data);
+			$this->load->view('forget_username', $data);
+			$this->load->view('footer', $data);
 		}
 }
 ?>

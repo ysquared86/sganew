@@ -10,7 +10,7 @@
 	echo form_label('Event Title', 'title');
 	echo form_input('title', set_value('title'));
 	
-	if(count($orgs_list) > 1) {
+	if(count($orgs_list) > 0) {
 		echo form_label('On behalf of', 'organization_id');
 		echo form_dropdown('organization_id', $orgs_list, set_value('organization_id'));
 	}
