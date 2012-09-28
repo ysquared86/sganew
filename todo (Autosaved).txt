@@ -12,6 +12,8 @@
 + User
 	- Forgot my password
 
++ Index functions for all the controllers
+
 lynette: lead vocals
 arian: piano, keyboards, backup vocals
 young: lead guitar, whatever instrument the songs need, backup vocals

@@ -42,8 +42,8 @@
 							<?php if( in_array('sga_liaison', $this->session->userdata('nav_items')) ) { ?>
 							<li><a>SGA Liaison</a>
 								<ul>
-									<li><a href="<?php echo site_url(); ?>liaison/edit_orgs">Edit Your Organizations</a></li>
-									<li><a href="<?php echo site_url(); ?>liaison/grants">Request SGA Grant</a></li>
+									<li><a href="<?php echo site_url(); ?>liaisons/edit_orgs">Edit Your Organizations</a></li>
+									<li><a href="<?php echo site_url(); ?>liaisons/grants">Request SGA Grant</a></li>
 								</ul>
 							</li>
 							<?php } //endif ?>

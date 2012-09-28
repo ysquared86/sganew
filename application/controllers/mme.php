@@ -155,7 +155,7 @@ class Mme extends MY_Controller {
 			$data['title'] = 'BU Law SGA | Monday Morning E-mail | My MME Submissions';
 			$data['heading'] = 'My MME Submissions';
 			$data['submissions'] = $this->Mme_issues->fetch_submissions_by( $user_id );
-		
+			$data['past_submissions'] = $this->Mme_issues->fetch_submissions_by( $user_id, true );
 			$this->load->view('header', $data);
 			$this->load->view('my_submissions', $data);
 		}

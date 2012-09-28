@@ -30,10 +30,16 @@ class Organizations extends CI_Model
 		return $result[0];
    }
    
-   public function get_liaison_id( $org_id, $liaison_role = 8 ) {
-		$result = $this->db->get_where('users_orgs_roles', array('organization_id' => $org_id, 'role_id' => $liaison_role), 1)->result();
-		if(!empty($result)) { return $result[0]->user_id; }
-		else { return ''; }
+   public function get_liaison_id( $org_id, $liaison_role = 8 )
+   {
+	$result = $this->db->get_where('users_orgs_roles', array('organization_id' => $org_id, 'role_id' => $liaison_role), 1)->result();
+	if(!empty($result)) { return $result[0]->user_id; }
+	else { return ''; }
+   }
+   
+   public function check_is_liaison_for( $org_id, $user_id )
+   {
+    
    }
    
    public function add_roles( $user_id, $positions_arr ) {

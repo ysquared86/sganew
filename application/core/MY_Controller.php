@@ -33,9 +33,10 @@ class MY_Controller extends CI_Controller {
 	
 	public function is_sga_liaison() {
 		if($this->logged_in()) {
-			$this->db->from('users_orgs_roles');
-			$this->db->where('user_id', $this->session->userdata('user')->id);
-			$this->db->where('role_id', 8); // SGA liaisons are given role ID of 8 in the database
+			$this->db->from('users_orgs_roles uor');
+			$this->db->join('roles r', 'uor.role_id = r.id');
+			$this->db->where('uor.user_id', $this->session->userdata('user')->id);
+			$this->db->where('r.role', 'SGA Liaison'); // SGA liaisons are given role ID of 8 in the database
 			return ($this->db->count_all_results() > 0);
 		} else {
 			return false;

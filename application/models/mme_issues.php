@@ -266,13 +266,16 @@ class Mme_issues extends CI_Model {
 		$this->db->insert('mme_submissions', $mme_submission);
 	}
 	
-	public function fetch_submissions_by( $user_id )
+	public function fetch_submissions_by( $user_id, $published = false )
 	{
 		$this->db->select('*');
 		$this->db->from('mme_submissions');
 		$this->db->where('user_id', $user_id);
-		$this->db->where('starts > ' . strtotime('next monday') . ' OR starts IS NULL');
-		
+		if($published) {
+			$this->db->where('starts > ' . strtotime('next monday') . ' OR starts IS NULL');
+		} else {
+			$this->db->where('starts <= ' . strtotime('next monday') . ' OR starts IS NULL');
+		}
 		return $this->db->get()->result();
 	}
 	
