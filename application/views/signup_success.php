@@ -1,1 +1,2 @@
-<p>Successfully signed up! <a href="<?php echo site_url(); ?>login">Login</a></p>
+<p>Successfully signed up!</p>
+<?php echo anchor('login', 'Login to your new account', 'class="button"'); ?>

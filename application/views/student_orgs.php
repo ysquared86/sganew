@@ -7,7 +7,7 @@
 		<tr class="<?php echo $evenodd; ?>">
 			<td>
 				<h3><?php echo anchor('resources/view_org/'.$org->id, $org->name, 'class="org-name"'); ?></h3>
-				<?php echo $org->description; ?>			
+				<p><?php echo $org->description; ?></p>
 			</td>
 		</tr>
 	<?php $i++; } //endforeach ?>

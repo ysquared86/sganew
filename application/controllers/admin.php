@@ -9,6 +9,10 @@ class Admin extends MY_Controller {
 		}
 	}
 	
+	public function index() {
+		$this->manage_users();
+	}
+	
 /* USERS
 =========================================================================================*/
 	public function manage_users() {
@@ -25,7 +29,8 @@ class Admin extends MY_Controller {
 		
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data["results"] = $this->Users->fetch_users($config["per_page"], $page);
-        $data["page_links"] = $this->pagination->create_links();
+		$data["pending"] = $this->Users->fetch_pending_users();
+        $data["page_links"] = '<div class="page-links">'.$this->pagination->create_links().'</div>';
 		
 		$data['title'] = 'BU Law SGA | Admin | Manage Users';
 		$data['heading'] = 'Manage Users';
@@ -86,6 +91,15 @@ class Admin extends MY_Controller {
 			redirect('admin/manage_users');
 		}
 	
+	public function approve_user( $user_id ) {
+		$this->load->model('Users');		
+		if(!isset($user_id)) { redirect('admin/manage_users'); }
+		
+		$this->Users->approve_user( $user_id );
+		$this->session->set_flashdata('flash', 'User was approved.');
+		redirect('admin/manage_users');
+	}
+	
 /* ORGANIZATIONS
 =========================================================================================*/
 	public function manage_orgs() {	
@@ -103,7 +117,7 @@ class Admin extends MY_Controller {
 		
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data["results"] = $this->Organizations->fetch_orgs($config["per_page"], $page);
-        $data["page_links"] = $this->pagination->create_links();
+        $data["page_links"] = '<div class="page-links">'.$this->pagination->create_links().'</div>';
 		
 		$data['title'] = 'BU Law SGA | Admin | Manage Organizations';
 		$data['heading'] = 'Manage Organizations';
@@ -122,7 +136,7 @@ class Admin extends MY_Controller {
 		$data['org'] = $this->Organizations->get_org($org_id);
 		
 		$liaison_role = $this->Liaisons->role_id();
-		$data['liaison_id'] = $this->Organizations->get_liaison_id($org_id, $liaison_role);
+		$data['liaison_id'] = $this->Organizations->get_liaison_id($org_id);
 		$data['users'] = $this->users_array();
 		
 		$this->load->view('header', $data);
@@ -148,7 +162,7 @@ class Admin extends MY_Controller {
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 		$data["results"] = $this->Outlines->fetch_outlines($config["per_page"], $page);
 		$data["pending"] = $this->Outlines->fetch_pending_outlines();
-		$data["page_links"] = $this->pagination->create_links();
+		$data["page_links"] = '<div class="page-links">'.$this->pagination->create_links().'</div>';
 		
 		$data['title'] = 'BU Law SGA | Admin | Manage Outlines';
 		$data['heading'] = 'Manage Outlines';
@@ -237,7 +251,7 @@ class Admin extends MY_Controller {
 			
 			$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
 			$data["issues"] = $this->Mme_issues->fetch_all_issues($config["per_page"], $page);
-			$data["page_links"] = $this->pagination->create_links();
+			$data["page_links"] = '<div class="page-links">'.$this->pagination->create_links().'</div>';
 			
 			$this->load->view('header', $data);
 			$this->load->view('mme_archives_admin', $data);
@@ -287,7 +301,7 @@ class Admin extends MY_Controller {
 		$this->session->set_userdata('redirect_url', current_url());
 		
 		$this->load->view('header', $data);
-		$this->load->view('single_issue_admin', $data);
+		$this->load->view('mme_single_issue_admin', $data);
 		$this->load->view('footer', $data);
 	}
 	
@@ -353,6 +367,21 @@ class Admin extends MY_Controller {
 		$nexturl = ($this->session->userdata('redirect_url')) ? $this->session->userdata('redirect_url') : 'admin/manage_mmes';
 		$this->session->unset_userdata('redirect_url');
 		redirect( $nexturl );
+	}
+	
+	public function mme_emailview( $id )
+	{
+		// admin/single_issue/id
+		if( !isset($id) ) { redirect('admin/manage_mmes'); }
+		$this->load->model('Mme_issues');
+		
+		$data['issue'] = $this->Mme_issues->get_issue_by_id( $id );
+		$data['title'] = 'BU Law SGA | Admin | MME E-mail Version';
+		$data['heading'] = 'Copy-paste Below into E-mail';
+		
+		//$this->load->view('header_emailview', $data);
+		$this->load->view('mme_emailview', $data);
+		//$this->load->view('footer_emailview', $data);
 	}
 }
 ?>

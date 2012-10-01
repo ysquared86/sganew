@@ -22,4 +22,18 @@
 </p>
 <p>Between both Councils is an Executive Committee, which meets regularly to update members on recent developments. The committee also votes on major school-wide issues that require a unified student voice.</p>
 <p>If you have any questions about SGA, please write to <a href="mailto:sgalaw@bu.edu">sgalaw@bu.edu</a>.</p>
+<hr />
 <h2>2012-2013 SGA Council Members</h2>
+<table class="sga-table">
+	<?php if(!empty($officers)) { 
+		foreach($officers as $officer)
+		{ ?>
+			<tr>
+				<td class="role"><?php echo $officer->role; ?></td>
+				<td><?php echo mailto($officer->email, $officer->firstname . ' ' .$officer->lastname); ?></td>
+			</tr>
+		<?php }
+	} else { ?>
+		N/A
+	<?php } ?>
+</table>

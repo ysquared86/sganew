@@ -5,9 +5,15 @@ class Sga extends MY_Controller {
 		parent::__construct();
 	}
 	
+	public function index() {
+		$this->about();
+	}
+	
 	public function about() {
+		$this->load->model('Organizations');
 		$data['title'] = 'BU Law SGA | Student Government | About Us';
 		$data['heading'] = 'About Us';
+		$data['officers'] = $this->Organizations->get_officers_display(1);
 		
 		$this->load->view('header', $data);
 		$this->load->view('about', $data);

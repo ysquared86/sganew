@@ -15,24 +15,30 @@ class Users extends CI_Model
     }
 
     public function users_count() {
-        return $this->db->count_all('users');
+		$this->db->from('users');
+		$this->db->where('pending', 'N');
+        return $this->db->count_all_results();
     }
 
-    public function fetch_users($limit, $start) {
+    public function fetch_users($limit = null, $start = null) {
 		$this->db->select('*');
 		$this->db->from('users');
+		$this->db->where('pending', 'N');
 		$this->db->order_by('lastname');
-        $this->db->limit($limit, $start);
+		if(isset($limit) && isset($start)) {
+			$this->db->limit($limit, $start);
+		}
 		
-        $query = $this->db->get();
-
-        if ($query->num_rows() > 0) {
-            foreach ($query->result() as $row) {
-                $data[] = $row;
-            }
-            return $data;
-        }
-        return false;
+        return $this->db->get()->result();
+   }
+   
+    public function fetch_pending_users() {
+		$this->db->select('*');
+		$this->db->from('users');
+		$this->db->where('pending', 'Y');
+		$this->db->order_by('lastname');
+		
+        return $this->db->get()->result();
    }
    
    public function get_user($user_id, $positions = false) {
@@ -115,5 +121,13 @@ class Users extends CI_Model
 		}
 		return $arr;
    }
+   
+	public function approve_user($user_id) {
+		$arr = array(
+			'pending' => 'N'
+		);
+		$this->db->where( 'id', $user_id );
+		$this->db->update( 'users', $arr );
+	}
 }
 ?>

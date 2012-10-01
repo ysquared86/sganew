@@ -3,59 +3,69 @@
 	<head>
 		<meta charset="utf-8">
 		<title><?php echo $title; ?></title>
+		<script src="<?php echo site_url() . 'js/jquery.js'; ?>"></script>
+		<script src="<?php echo site_url() . 'js/jquery-ui.js'; ?>"></script>
+		<script>
+			$(function() {
+				$( "input.date" ).datepicker();
+			});
+		</script>
+		
 		<?php echo link_tag('css/sga_main.css'); ?>
 	</head>
 	<body>
 		<div id="wrapper">
 			<div id="header">
 				<div id="header-wrap">
-					<h1 class="title"><a href="<?php echo site_url(); ?>">BU LAW SGA SITE</a></h1>
+					<h1 class="title"><?php echo anchor(site_url(), 'BU School of Law SGA'); ?></h1>
 					<div id="nav">
 						<ul>
-							<li><a>MME</a>
+							<li><a<?php if($this->session->userdata('nav_items')->active_menu == 'mme') { echo ' class="active"'; } ?>>MME</a>
 								<ul>
-									<li><a href="<?php echo site_url(); ?>mme/">This Week (<?php echo $this->session->userdata('latest_mme_date'); ?>)</a></li>
-									<li><a href="<?php echo site_url(); ?>mme/archives">Archives</a></li>
-									<li><a href="<?php echo site_url(); ?>mme/submit">Submit to MME</a></li>
-									<li><a href="<?php echo site_url(); ?>mme/my_submissions">My MME Submissions</a></li>
+									<li><?php echo anchor('mme', 'This Week ('.$this->session->userdata('nav_items')->latest_mme_date.')'); ?></li>
+									<li><?php echo anchor('mme/archives', 'Archives'); ?></li>
+									<?php if($this->session->userdata('nav_items')->logged_in) { ?>
+										<li><?php echo anchor('mme/my_submissions', 'My MME Submissions'); ?></li>
+									<?php } ?>
+									<li><?php echo anchor('mme/submit', 'Submit to MME'); ?></li>
 								</ul>
 							</li>
-							<li><a>Student Resources</a>
+							<li><a<?php if($this->session->userdata('nav_items')->active_menu == 'resources') { echo ' class="active"'; } ?>>Student Resources</a>
 								<ul>
-									<li><a href="<?php echo site_url(); ?>resources/calendar">Events Calendar</a></li>
-									<li><a href="http://www.youngjyoon.com" target="_blank">Bar Review</a></li>
-									<li><a href="<?php echo site_url(); ?>resources/marketplace">Marketplace</a></li>
-									<li><a href="<?php echo site_url(); ?>resources/outlines">Outline Database</a></li>
-									<li><a href="<?php echo site_url(); ?>resources/prof_ratings">Professor Ratings</a></li>
-									<li><a href="<?php echo site_url(); ?>resources/student_orgs">Student Organizations List</a></li>
+									<li><?php echo anchor('resources/calendar', 'Events Calendar'); ?></li>
+									<li><?php echo anchor('http://www.youngjyoon.com', 'Bar Review', 'target="_blank"'); ?></li>
+									<li><?php echo anchor('resources/marketplace', 'Marketplace'); ?></li>
+									<li><?php echo anchor('resources/outlines', 'Outline Database'); ?></li>
+									<li><?php echo anchor('resources/prof_ratings', 'Professor Ratings'); ?></li>
+									<li><?php echo anchor('resources/student_orgs', 'Student Organizations List'); ?></li>									
 								</ul>
 							</li>
-							<li><a>SGA</a>
+							<li><a<?php if($this->session->userdata('nav_items')->active_menu == 'sga') { echo ' class="active"'; } ?>>SGA</a>
 								<ul>
-									<li><a href="<?php echo site_url(); ?>sga/about">About Us</a></li>
-									<li><a href="<?php echo site_url(); ?>sga/office_hours">Office Hours</a></li>
-									<li><a href="<?php echo site_url(); ?>sga/documents">SGA Documents</a></li>
-									<li><a href="<?php echo site_url(); ?>sga/merch">BU Law Merchandise</a></li>
+									<li><?php echo anchor('sga/about', 'About Us'); ?></li>
+									<li><?php echo anchor('sga/office_hours', 'Office Hours'); ?></li>
+									<li><?php echo anchor('sga/documents', 'SGA Documents'); ?></li>
+									<li><?php echo anchor('sga/merch', 'BU Law Merchandise'); ?></li>
 								</ul>
 							</li>
 							
-							<?php if( in_array('sga_liaison', $this->session->userdata('nav_items')) ) { ?>
-							<li><a>SGA Liaison</a>
+							<?php if( $this->session->userdata('nav_items')->sga_liaison ) { ?>
+							<li><a<?php if($this->session->userdata('nav_items')->active_menu == 'liaisons') { echo ' class="active"'; } ?>>SGA Liaison</a>
 								<ul>
-									<li><a href="<?php echo site_url(); ?>liaisons/edit_orgs">Edit Your Organizations</a></li>
-									<li><a href="<?php echo site_url(); ?>liaisons/grants">Request SGA Grant</a></li>
+									<li><?php echo anchor('liaisons/edit_orgs', 'Edit Your Organizations'); ?></li>
+									<li><?php echo anchor('liaisons/grants', 'Request SGA Grant'); ?></li>
 								</ul>
 							</li>
 							<?php } //endif ?>
 
-							<?php if( in_array('admin', $this->session->userdata('nav_items')) ){ ?>
-							<li><a>Admin</a>
+							<?php if( $this->session->userdata('nav_items')->admin || $this->session->userdata('nav_items')->sga ) { ?>
+							<li><a<?php if($this->session->userdata('nav_items')->active_menu == 'admin') { echo ' class="active"'; } ?>>Admin</a>
 								<ul>
-									<li><a href="<?php echo site_url(); ?>admin/manage_users">Manage Users</a></li>
-									<li><a href="<?php echo site_url(); ?>admin/manage_mmes">Manage MME</a></li>
-									<li><a href="<?php echo site_url(); ?>admin/manage_outlines">Manage Outlines</a></li>
-									<li><a href="<?php echo site_url(); ?>admin/manage_orgs">Manage Organizations</a></li>
-									<li><a href="<?php echo site_url(); ?>admin/liaisons">Liaisons</a></li>
+									<li><?php echo anchor('admin/manage_users', 'Manage Users'); ?></li>
+									<li><?php echo anchor('admin/manage_mmes', 'Manage MME'); ?></li>
+									<li><?php echo anchor('admin/manage_outlines', 'Manage Outlines'); ?></li>
+									<li><?php echo anchor('admin/manage_orgs', 'Manage Organizations'); ?></li>
+									<li><?php echo anchor('admin/liaisons', 'Manage SGA Liaisons'); ?></li>
 								</ul>
 							</li>
 							<?php } //endif?>							
@@ -89,4 +99,4 @@
 			
 			<div id="content">
 				<h1><?php echo $heading; ?></h1>
-				<div class="flashdata"><?php echo $this->session->flashdata('flash'); ?></div>
+				<?php if($this->session->flashdata('flash')) { ?><div class="flashdata"><?php echo $this->session->flashdata('flash'); ?></div><?php } ?>

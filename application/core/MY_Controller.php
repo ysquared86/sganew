@@ -2,15 +2,6 @@
 class MY_Controller extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
-		
-		$this->db->select('firstmonday');
-		$this->db->from('mme_issues');
-		$this->db->where('published', 'Y');
-		$this->db->order_by('firstmonday', 'desc');
-		$this->db->limit(1);
-		$last_mme = $this->db->get()->result();
-		
-		$this->session->set_userdata('latest_mme_date', date('Y/m/d', $last_mme[0]->firstmonday));
 		$this->session->set_userdata('nav_items', $this->nav_items());
 		
 		date_default_timezone_set('America/New_York');
@@ -18,7 +9,7 @@ class MY_Controller extends CI_Controller {
 	
 	public function logged_in() {
 		return $this->session->userdata('user');
-	}
+	}	
 	
 	public function is_sga() {
 		if($this->logged_in()) {
@@ -53,11 +44,24 @@ class MY_Controller extends CI_Controller {
 	
 	public function nav_items() {
 		// function to hide certain nav items based on user roles
-		$arr = array();
-		if($this->is_admin()) { array_push($arr, 'admin'); }
-		if($this->is_sga_liaison()) { array_push($arr, 'sga_liaison'); }
-		if($this->is_sga()) { array_push($arr, 'sga'); }
-		return $arr;
+		$obj = new stdClass();
+		
+		$obj->admin = false;
+		$obj->sga_liaison = false;
+		$obj->sga = false;
+		$obj->logged_in = false;
+		
+		if($this->is_admin()) { $obj->admin = true; }
+		if($this->is_sga_liaison()) { $obj->sga_liaison = true; }
+		if($this->is_sga()) { $obj->sga = true; }
+		if($this->logged_in()) { $obj->logged_in = true; }
+		
+		$this->load->model('Mme_issues');
+		$obj->latest_mme_date = $this->Mme_issues->latest_mme_date();
+		
+		$obj->active_menu = $this->uri->segment(1);
+		
+		return $obj;
 	}
 	
 	public function orgs_array( $blank = true ) {
@@ -92,6 +96,17 @@ class MY_Controller extends CI_Controller {
 		return $arr;
 	}
 	
+	public function users_usernames_array( $blank = true ) {
+		// users for a dropdown
+		if( $blank ) { $arr = array( '' => '-------------' ); }
+		$this->db->order_by('lastname');
+		$users = $this->db->get('users')->result();
+		foreach($users as $user) {
+			$arr[$user->id] = $user->lastname . ', ' . $user->firstname . ' (' . $user->username . ')';
+		}
+		return $arr;
+	}
+	
 	public function profs_array( $blank = true ) {
 		// professors for a dropdown
 		if( $blank ) { $arr = array( '' => '-------------' ); }
@@ -109,7 +124,7 @@ class MY_Controller extends CI_Controller {
 		$this->db->order_by('course_title');
 		$courses = $this->db->get('courses')->result();
 		foreach($courses as $course) {
-			$arr[$course->id] = $course->course_number . ' - ' . $course->course_title;
+			$arr[$course->id] = $course->course_title . ' - ' . $course->course_number;
 		}
 		return $arr;
 	}
@@ -133,6 +148,17 @@ class MY_Controller extends CI_Controller {
 			'faculty' => 'Faculty/Staff',
 			'alumni' => 'Alumni'
 		);
+	}
+	
+	public function mkt_cats_array( $blank = true ) {
+		// organizations for a dropdown
+		if( $blank ) { $arr = array( '' => '-------------' ); }
+		$this->db->order_by('id');
+		$cats = $this->db->get('market_categories')->result();
+		foreach($cats as $cat) {
+			$arr[$cat->id] = $cat->category;
+		}
+		return $arr;
 	}
 	
 	/* ACCESS CONTROL */

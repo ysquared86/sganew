@@ -31,6 +31,8 @@
 	echo form_label('Class', 'class');
 	echo form_dropdown( 'class', $class_options, set_value('class') );
 	
+	echo '<br />';
+	
 	echo form_submit('submit', 'Sign Up for an Account');
 	echo form_close();
 ?>

@@ -12,7 +12,7 @@ class Login extends MY_Controller {
 		
 		$this->load->view('header', $data);
 		$this->load->view('login', $data);
-		$this->load->view('footer', $data);
+		$this->load->view('footer_push', $data);
 	}
 	
 	public function submit() {
@@ -145,7 +145,12 @@ class Login extends MY_Controller {
 		}
 		
 		public function forget_pw( $action = null ) {
+			$data['title'] = 'BU Law SGA | Reset Your Password';
+			$data['heading'] = 'Reset Your Password';
 			
+			$this->load->view('header', $data);
+			$this->load->view('forget_password', $data);
+			$this->load->view('footer_push', $data);
 		}
 		
 		public function forget_username() {
@@ -157,14 +162,14 @@ class Login extends MY_Controller {
 				if($username) {
 					$data['string'] = 'Your username is: ' . $username;
 				} else {
-					$data['string'] = 'Your e-mail address is not on our database. Please ' . anchor('login/signup', 'sign up for an account');
+					$data['string'] = 'Your e-mail address is not on our database. Please ' . anchor('login/signup', 'sign up for an account') . '.';
 				}
 			} else {
 				$data['string'] = '';
 			}			
 			$this->load->view('header', $data);
 			$this->load->view('forget_username', $data);
-			$this->load->view('footer', $data);
+			$this->load->view('footer_push', $data);
 		}
 }
 ?>

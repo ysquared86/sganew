@@ -1,11 +1,4 @@
 <?php
-/*
-* Author: Young J. Yoon
-* Written: Fall 2012
-* For: SGA website
-* Description: Each issue of the Monday Morning E-mail is cast into this model. Also see Model Mme_article for each article
-*/
-
 class Mme_issues extends CI_Model {
 	public $id;
 	public $firstmonday = '';
@@ -21,6 +14,7 @@ class Mme_issues extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
+		date_default_timezone_set('America/New_York');
 	}
 	
 	public function fetch_all_issues( $limit = null, $start = null )
@@ -73,6 +67,17 @@ class Mme_issues extends CI_Model {
 		$result = $this->db->get()->result();
 		$id = $result[0]->id;
 		return $this->get_issue_by_id( $id );
+	}
+	
+	public function latest_mme_date() {
+		$this->db->select('firstmonday');
+		$this->db->from('mme_issues');
+		$this->db->where('published', 'Y');
+		$this->db->order_by('firstmonday', 'desc');
+		$this->db->limit(1);
+		$last_mme = $this->db->get()->result();
+		return date('Y/m/d', $last_mme[0]->firstmonday);
+		//return($last_mme[0]->firstmonday);
 	}
 	
 	public function get_issue_by_id( $id, $admin = false )
@@ -207,6 +212,88 @@ class Mme_issues extends CI_Model {
 			</div>
 			
 			<?php if($i != $end) { ?><hr class="mme-small-hr" /><?php } ?>
+		<?php
+		$i++;
+		$this->counter++;
+		} //endforeach
+	} //end function
+	
+	public function print_entries_email( $group = 'this_week' )
+	{
+		$entries = $this->{'entries_' . $group};
+		$i = 1; // to tell the end of each array
+		$end = count( $entries );
+		foreach( $entries as $entry )
+		{ ?>
+			<layout label="Text only">
+				<table id="mme-<?php echo $entry->id; ?>" class="w580" width="580" cellpadding="0" cellspacing="0" border="0">
+					<tbody><tr>
+						<td class="w580" width="580">
+							<p align="left" class="article-title" style="display: inline;"><singleline label="Title"><?php echo $this->counter . ') ' . $entry->title; ?></singleline></p>
+							<a href="#top" style="font-size: 11px;">(top)</a>
+							<div align="left" class="article-content" style="margin-top: 10px;">
+								<multiline label="Description">
+									<table class="mme-details">
+										<?php if($entry->name) { ?>
+											<tr>
+												<td valign="top" width="50px"><strong>Who:</strong></td>
+												<td valign="top"><?php echo $entry->name; ?></td>
+											</tr>
+										<?php } ?>					
+										<tr>
+											<td valign="top"><strong>When:</strong></td>
+											<td valign="top">
+											<?php // deal with dates
+												$startdate = date('l, F d, Y', $entry->starts);
+												$starttime = date('g:i A', $entry->starts);
+												$enddate = ($startdate == date('l, F d, Y', $entry->ends)) ? '' : date('l, F d, Y', $entry->ends);
+												$endtime = date('g:i A', $entry->ends);
+												
+												if($enddate == '') {
+													if($starttime == $endtime) {
+														echo $startdate . ' at ' . $starttime;
+													} else {
+														echo $startdate . ' from ' . $starttime . ' to ' . $endtime;
+													}
+												} else {
+													echo 'From ' . $startdate . ', ' . $starttime . ' to ' . $enddate . ', ' . $endtime;
+												}?>
+											</td>
+										</tr>					
+										<?php if($entry->location) { ?>
+											<tr>
+												<td valign="top"><strong>Where:</strong></td>
+												<td valign="top"><?php echo $entry->location; ?></td>
+											</tr>
+										<?php } ?>
+										
+										<tr>
+											<td valign="top"><strong>What:</strong></td>
+											<td valign="top"><?php echo $entry->description; ?></td>
+										</tr>
+										
+										<?php if($entry->link) { ?>
+											<tr>
+												<td valign="top"><strong>Website:</strong></td>
+												<td valign="top"><a href="<?php echo $entry->link; ?>"><?php echo $entry->link; ?></a></td>
+											</tr>
+										<?php } ?>
+
+										<?php if($entry->email) { ?>
+											<tr>
+												<td valign="top"><strong>Contact:</strong></td>
+												<td valign="top"><a href="mailto:<?php echo $entry->email; ?>"><?php echo $entry->email; ?></a></td>
+											</tr>
+										<?php } ?>						
+									</table>
+								</multiline>
+							</div>
+						</td>
+					</tr>
+					<tr><td class="w580" width="580" height="10"></td></tr>
+				</tbody></table>
+			</layout>
+			<?php if($i != $end) { ?><hr style="color: #CC0000; background-color: #CC0000; height: 1px; margin-bottom: 16px;" /><?php } ?>
 		<?php
 		$i++;
 		$this->counter++;

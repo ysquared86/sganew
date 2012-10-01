@@ -1,11 +1,12 @@
+<?php echo anchor('resources/prof_ratings', 'Back to Ratings List', 'class="button top-right"'); ?>
+	
+<div id="ratings-left">
 <?php
-	echo anchor('resources/prof_ratings', 'Back to Ratings List', 'class="button"');
 	echo form_open('resources/prof_ratings/add', array( 'class' => 'sga-form' ));
 ?>
-	<div id="ratings-left">
 		<table class="ratings-table">
 			<tr>
-				<th>Professor was...</th>
+				<th>S/he was...</th>
 				<th>1<br />(lowest)</th>
 				<th>2</th>
 				<th>3</th>
@@ -52,7 +53,7 @@
 		
 		<?php 
 			echo form_label('Class', 'class');
-			echo form_dropdown('course_id', $courses, set_value('course_id'));
+			echo form_dropdown('course_id', $courses, set_value('course_id'), 'class="short-select"');
 			
 			echo form_label('Semester', 'semester');
 			echo form_dropdown('semester', array('Fall' => 'Fall', 'Spring' => 'Spring'), set_value('semester'));
@@ -66,8 +67,7 @@
 			echo form_hidden('professor_id', $ratings->professor_id);
 			echo form_submit('submit', 'Submit Ratings');
 			echo form_close();
-		?>
-
+		?>		
 	</div>
 	
 	<div id="ratings-right">
@@ -88,9 +88,11 @@
 				<h3>Easy</h3>
 				<p><?php echo $ratings->easy_avg; ?></p>
 			</div>
+			<div class="clear"></div>
 		</div><!-- .ratings-numbers -->
 		
 		<div id="ratings-comments">
+			<h3>Comments</h3>
 			<?php 
 				if($comments) {
 					foreach($comments as $comment) { ?>
@@ -98,6 +100,7 @@
 						<h4>Class: <?php echo $comment->course_title; ?> (<?php echo $comment->semester . ' ' . $comment->year; ?>)</h4>
 						<p><?php echo $comment->comments; ?></p>
 						<p class="ratings-comment-meta">Reviewed: <?php echo date('F d, Y', $comment->created) . ' at ' . date('g:i a', $comment->created); ?></p>
+						<div class="clear"></div>
 					</div>
 			<?php 
 					} //endforeach 
@@ -112,3 +115,4 @@
 			?>
 		</div>
 	</div>
+	<div class="clear"></div>

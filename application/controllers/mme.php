@@ -4,7 +4,6 @@ class Mme extends MY_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->model('Mme_issues');
-		$this->load->model('Mme_issue');
 	}
 
 	public function index()
@@ -30,6 +29,7 @@ class Mme extends MY_Controller {
 		
 		$this->load->view('header', $data);
 		$this->load->view('mme_single_issue', $data);
+		$this->load->view('footer', $data);
 	}
 	
 	public function archives()

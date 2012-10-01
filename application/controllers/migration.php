@@ -23,6 +23,8 @@ class Migration extends CI_Controller {
 		);
 		$this->db1 = $this->load->database($config1, TRUE); //old DB
 		$this->db2 = $this->load->database($config2, TRUE); //new DB
+		
+		date_default_timezone_set('America/New_York');
 	}
 
 	public function index()

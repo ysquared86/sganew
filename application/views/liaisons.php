@@ -25,5 +25,6 @@
 	
 	?>
 </table>
+<br />
 <?php echo form_submit('submit', 'Save Liaisons List'); ?>
 <?php echo form_close(); ?>

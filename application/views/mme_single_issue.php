@@ -1,7 +1,6 @@
 <div class="mme">
 	<h2>Monday Morning E-mail</h2>
 	<h3>Week of <?php echo date('F d, Y', $issue->firstmonday); ?></h3>
-	
 	<p>Greetings BU Law!</p>
 	<p>Below please find the SGA Monday Morning E-mail for the week of <?php echo date('F d, Y', $issue->firstmonday); ?>.  If you would like to submit to the Monday Morning E-mail, please register  <?php echo anchor('login/signup', 'here'); ?>.  Remember, <strong>all submissions are due by <u>5pm on Sunday</u>.</strong></p>
 	<p>If you have any comments or suggestions, please e-mail us at <?php echo mailto('sgalaw@bu.edu'); ?></a>.</p>
@@ -24,13 +23,17 @@
 	
 	<hr class="mme-big-hr" />
 	
-	<h4 class="mme-heading">Student Government Association</h4>
-	<?php $issue->print_entries( 'sga' ); ?>
-	<hr class="mme-medium-hr" />
+	<?php if(!empty($issue->entries_sga)) { ?>
+		<h4 class="mme-heading">Student Government Association</h4>
+		<?php $issue->print_entries( 'sga' ); ?>
+		<hr class="mme-medium-hr" />
+	<?php } ?>
 	
-	<h4 class="mme-heading">This Week</h4>
-	<?php $issue->print_entries( 'this_week' ); ?>
-	<hr class="mme-medium-hr" />
+	<?php if(!empty($issue->entries_sga)) { ?>
+		<h4 class="mme-heading">This Week</h4>
+		<?php $issue->print_entries( 'this_week' ); ?>
+		<hr class="mme-medium-hr" />
+	<?php } ?>
 	
 	<?php if(!empty($issue->entries_next_week)) { ?>
 		<h4 class="mme-heading">Next Week</h4>

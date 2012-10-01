@@ -1,6 +1,6 @@
 <p class="errors"><?php echo validation_errors(); ?></p>
 <?php 
-	echo anchor('resources/outlines', 'Back to Outline Database', 'class="button"');
+	echo anchor('resources/outlines', 'Back to Outline Database', 'class="button top-right"');
 	
 	echo form_open_multipart('resources/outlines/upload', array('class' => 'sga-form'));
 	

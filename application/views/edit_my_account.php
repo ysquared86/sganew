@@ -12,7 +12,7 @@
 	echo form_input('lastname', set_value('lastname', $edit_user->lastname));
 	
 	echo form_label('E-mail', 'email');
-	echo $edit_user->email;
+	echo '<div class="unchangeable">'.$edit_user->email.'</div>';
 	
 	echo form_label('Preferred E-mail', 'email_pref');
 	echo form_input('email_pref', set_value('email_pref', $edit_user->email_pref));
@@ -24,6 +24,8 @@
 	echo form_dropdown( 'class', $class_arr, set_value('class', $edit_user->class) );
 	
 	echo form_hidden('id', $edit_user->id);
+	
+	echo '<br />';
 	
 	echo form_submit('submit', 'Update Account Information');
 	

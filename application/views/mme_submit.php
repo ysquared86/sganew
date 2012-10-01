@@ -15,8 +15,10 @@
 		echo form_dropdown('organization_id', $orgs_list, set_value('organization_id'));
 	}
 	
-	echo form_label('No Time', 'no_time');
+	echo '<div class="checkboxes">';
+	echo form_label('Check this box if your event has no specified time', 'no_time', array('class' => 'label-noclear'));
 	echo form_checkbox('no_time', 'Y', false);
+	echo '</div>';
 	
 	// FOR START TIME	
 	echo form_label('Starts', 'starts_date');
@@ -91,6 +93,8 @@
 	
 	echo form_label( 'Contact E-mail', 'email' );
 	echo form_input( 'email', set_value('email') );
+	
+	echo '<br />';
 	
 	echo form_submit('submit', 'Submit to MME');
 	echo form_close();
