@@ -35,7 +35,7 @@ class Sga extends MY_Controller {
 		
 		$this->load->view('header', $data);
 		$this->load->view('documents', $data);
-		$this->load->view('footer', $data);
+		$this->load->view('footer_push', $data);
 	}
 	
 	public function merch() {

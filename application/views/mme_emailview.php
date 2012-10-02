@@ -120,7 +120,8 @@ body, td { font-family: 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif; 
                 <div align="center" id="headline">
                     <p>
                         <span style="font-size: 30px; font-weight: bold; color: #EEEEEE; text-decoration: none;">Monday Morning E-mail</span>
-						<br /><br /><span style="font-size: 18px; font-weight: bold; color: #CCCCCC;">Week of <?php echo date('F d, Y', $issue->firstmonday); ?></span>
+						<br/>
+						<span style="font-size: 18px; font-weight: bold; color: #CCCCCC;">Week of <?php echo date('F d, Y', $issue->firstmonday); ?></span>
                     </p>
                 </div>
             </td>

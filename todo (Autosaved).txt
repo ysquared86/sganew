@@ -10,6 +10,8 @@
 	- Confirmation E-mail
 + FAQs
 
++ Check CSS in chrome and IE
+
 
 <script language="javascript">
 function copy_to_clipboard() 

@@ -1,4 +1,6 @@
-<p>Please complete the form below to request access to the secure areas of this website. You must enter at least one BU e-mail address to verify your affiliation with Boston University. A confirmation e-mail will be sent to your preferred e-mail address. Please check this e-mail for instructions to complete your sign-up. If you do not receive this e-mail, please contact the webmaster at <a href="mailto:youngo@bu.edu">youngo@bu.edu</a>.</p>
+<p>Please complete the form below to request access to the secure areas of this website.</p>
+<p><strong>You must enter at least one BU e-mail address to verify your affiliation with Boston University.</strong>
+<p>A confirmation e-mail will be sent to your preferred e-mail address. Please check this e-mail for instructions to complete your sign-up. If you do not receive this e-mail, please contact the webmaster at <a href="mailto:youngo@bu.edu">youngo@bu.edu</a>.</p>
 
 <div class="errors"><?php echo validation_errors(); ?></div>
 <?php
@@ -16,7 +18,7 @@
 	echo form_label('Choose Password', 'password');
 	echo form_password('password');
 	
-	echo form_label('Retype Password', 'password1');
+	echo form_label('Re-type Password', 'password1');
 	echo form_password('password1');
 	
 	echo form_label('E-mail', 'email');

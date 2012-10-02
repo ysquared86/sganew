@@ -373,15 +373,33 @@ class Admin extends MY_Controller {
 	{
 		// admin/single_issue/id
 		if( !isset($id) ) { redirect('admin/manage_mmes'); }
-		$this->load->model('Mme_issues');
 		
+		$this->load->model('Mme_issues');		
 		$data['issue'] = $this->Mme_issues->get_issue_by_id( $id );
-		$data['title'] = 'BU Law SGA | Admin | MME E-mail Version';
-		$data['heading'] = 'Copy-paste Below into E-mail';
+		$data['title'] = 'BU Law SGA | Admin | MME E-mail Version | Issue '.$id;
 		
-		//$this->load->view('header_emailview', $data);
-		$this->load->view('mme_emailview', $data);
-		//$this->load->view('footer_emailview', $data);
+		$config = Array(
+			'protocol' => 'smtp',
+			'smtp_host' => 'ssl://smtp.googlemail.com',
+			'smtp_port' => 465,
+			'smtp_user' => 'ysquared86@gmail.com',
+			'smtp_pass' => 'asianinvasion',
+			'mailtype'  => 'html', 
+			'charset'   => 'iso-8859-1'
+		);
+		$this->load->library('email', $config);
+		$this->email->set_newline("\r\n");
+		
+		$this->email->from('webmaster@bulawsga.com', 'SGA Law Webmaster');
+		$this->email->to('ysquared86@gmail.com');
+
+		$this->email->subject('Email Test');
+		$this->email->message($this->load->view('mme_emailview', $data, true));
+
+		if (!$this->email->send())
+			echo $this->email->print_debugger();
+		else
+			$this->load->view('mme_emailview', $data);
 	}
 }
 ?>

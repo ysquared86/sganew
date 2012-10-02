@@ -1,4 +1,4 @@
-<?php echo anchor('admin/manage_mmes/create', 'Create a new issue', 'class="button"'); ?>
+<div class="top-right"><?php echo anchor('admin/manage_mmes/create', 'Create a new issue', 'class="button"'); ?></div>
 <table class="sga-table">
 	<tr>
 		<th>Issue</th>
