@@ -1,4 +1,4 @@
-<div class="errors"><?php echo validation_errors(); ?></div>
+<?php if(validation_errors()) { ?><div class="errors"><?php echo validation_errors(); ?></div><?php } ?>
 <?php
 	echo '<h2>'.$edit_user->username.'</h2>';
 	echo 'Member since ' . date('F d, Y', $edit_user->created);

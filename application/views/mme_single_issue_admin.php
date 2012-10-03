@@ -54,10 +54,10 @@
 
 <?php if($issue->published == 'Y') { ?>
 <div class="mme-admin-pub published">
-	<p>This issue has been published. <?php echo anchor('admin/unpublish_issue/'.$issue->id, 'Unpublish', 'class="button"'); ?> <?php echo anchor('admin/delete_issue/'.$issue->id, 'Delete', 'class="button"'); ?></p>
+	<p>This issue has been published. <?php echo anchor('admin/unpublish_issue/'.$issue->id, 'Unpublish', 'class="button"'); ?> <?php echo anchor('admin/delete_issue/'.$issue->id, 'Delete', 'class="button"'); ?> <?php echo anchor('admin/mme_emailpreview/'.$issue->id, 'View E-mail Version', 'class="button" target="_blank"'); ?></p>
 </div>
 <?php } else { ?>
 <div class="mme-admin-pub unpublished">
-	<p>This issue has not been published. <?php echo anchor('admin/publish_issue/'.$issue->id, 'Publish', 'class="button"'); ?></p>
+	<p>This issue has not been published. <?php echo anchor('admin/publish_issue/'.$issue->id, 'Publish', 'class="button"'); ?> <?php echo anchor('admin/overrides/'.$issue->id, 'Edit Overrides', 'class="button"'); ?></p>
 </div>
 <?php } ?>

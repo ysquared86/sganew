@@ -296,7 +296,7 @@ class Admin extends MY_Controller {
 		
 		$data['issue'] = $this->Mme_issues->get_issue_by_id( $id, true );
 		$data['title'] = 'BU Law SGA | Admin | View Single MME Issue';
-		$data['heading'] = 'View Single MME Issue - Week of ' . date('F d, Y', $data['issue']->firstmonday);
+		$data['heading'] = 'Manage Single MME Issue - Week of ' . date('F d, Y', $data['issue']->firstmonday);
 		
 		$this->session->set_userdata('redirect_url', current_url());
 		
@@ -369,7 +369,7 @@ class Admin extends MY_Controller {
 		redirect( $nexturl );
 	}
 	
-	public function mme_emailview( $id )
+	public function mme_emailpreview( $id )
 	{
 		// admin/single_issue/id
 		if( !isset($id) ) { redirect('admin/manage_mmes'); }
@@ -378,28 +378,58 @@ class Admin extends MY_Controller {
 		$data['issue'] = $this->Mme_issues->get_issue_by_id( $id );
 		$data['title'] = 'BU Law SGA | Admin | MME E-mail Version | Issue '.$id;
 		
-		$config = Array(
-			'protocol' => 'smtp',
-			'smtp_host' => 'ssl://smtp.googlemail.com',
-			'smtp_port' => 465,
-			'smtp_user' => 'ysquared86@gmail.com',
-			'smtp_pass' => 'asianinvasion',
-			'mailtype'  => 'html', 
-			'charset'   => 'iso-8859-1'
-		);
-		$this->load->library('email', $config);
+		$this->load->view('mme_emailpreview', $data);
+	}
+	
+	public function mme_emailsend( $id )
+	{
+		// admin/single_issue/id
+		if( !isset($id) ) { redirect('admin/manage_mmes'); }
+		
+		$this->load->model('Mme_issues');		
+		$data['issue'] = $this->Mme_issues->get_issue_by_id( $id );
+		$data['title'] = 'BU Law SGA | Admin | MME E-mail Version | Issue '.$id;
+		
+		$this->load->library('email', $this->email_config);
 		$this->email->set_newline("\r\n");
 		
-		$this->email->from('webmaster@bulawsga.com', 'SGA Law Webmaster');
+		$this->email->from('ysquared86@gmail.com', 'SGA Law Webmaster');
 		$this->email->to('ysquared86@gmail.com');
 
-		$this->email->subject('Email Test');
-		$this->email->message($this->load->view('mme_emailview', $data, true));
+		$this->email->subject( 'Monday Morning E-mail - Week of ' . date('F d, Y', $data['issue']->firstmonday) );
+		$this->email->message( $this->load->view('mme_emailview', $data, true) );
 
 		if (!$this->email->send())
+		{
 			echo $this->email->print_debugger();
+		}
 		else
-			$this->load->view('mme_emailview', $data);
+		{
+			$this->session->set_flashdata('flash', 'This MME was successfully sent.<br />DO NOT CLICK SEND AGAIN.');
+			redirect('admin/mme_emailpreview/'.$id);
+		}
+	}
+	
+	public function overrides( $issue_id )
+	{
+		$this->load->model('Mme_issues');
+		$data['issue'] = $this->Mme_issues->get_issue_by_id( $issue_id );
+		$data['entries_wo_time'] = $this->Mme_issues->fetch_submissions_wo_time();
+		$data['in_this_issue'] = $this->Mme_issues->fetch_overrides( $issue_id );
+		$data['title'] = 'BU Law SGA | Admin | Edit Overridden Entries';
+		$data['heading'] = 'Edit Overridden Entries: Week of ' . date('F d, Y', $data['issue']->firstmonday);
+		
+		$this->load->view('header', $data);
+		$this->load->view('mme_overrides', $data);
+		$this->load->view('footer', $data);
+	}
+	
+	public function overrides_process( $issue_id )
+	{
+		$this->load->model('Mme_issues');
+		$this->Mme_issues->add_overrides( $this->input->post(), $issue_id );
+		$this->session->set_flashdata('flash', 'Overrides were saved.');
+		redirect('admin/single_issue/'.$issue_id);
 	}
 }
 ?>

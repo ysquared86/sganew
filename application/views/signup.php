@@ -2,7 +2,7 @@
 <p><strong>You must enter at least one BU e-mail address to verify your affiliation with Boston University.</strong>
 <p>A confirmation e-mail will be sent to your preferred e-mail address. Please check this e-mail for instructions to complete your sign-up. If you do not receive this e-mail, please contact the webmaster at <a href="mailto:youngo@bu.edu">youngo@bu.edu</a>.</p>
 
-<div class="errors"><?php echo validation_errors(); ?></div>
+<?php if(validation_errors()) { ?><div class="errors"><?php echo validation_errors(); ?></div><?php } ?>
 <?php
 	echo form_open('login/signup', array('class' => 'sga-form'));
 	

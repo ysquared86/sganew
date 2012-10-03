@@ -1,4 +1,4 @@
-<div class="errors"><?php echo validation_errors(); ?></div>
+<?php if(validation_errors()) { ?><div class="errors"><?php echo validation_errors(); ?></div><?php } ?>
 
 <?php
 	echo form_open('mme/my_submissions/'.$submission->id, array( 'class' => 'sga-form' ) );

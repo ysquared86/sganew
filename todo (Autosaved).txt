@@ -1,29 +1,4 @@
 + Liaisons
 	- Request SGA grant (not now)
 
-+ Admin
-	- MME email view
-	- MME overrides
-
-+ User
-	- Forgot my password
-	- Confirmation E-mail
 + FAQs
-
-+ Check CSS in chrome and IE
-
-
-<script language="javascript">
-function copy_to_clipboard() 
-{
-	// Get the selected Html source of the window object
-     // where the context menu item was executed
-	 var selectedDiv = document.getElementById('holdtext');
-     var selectedHtml=(selectedDiv.createRange()).htmlText;
-     // Set the clipboard with selected HTML, if there is any
-     if(selectedHtml!= "")
-         window.clipboardData.setData("Text",selectedHtml);
-}
-</script>
-
-<button onClick="copy_to_clipboard();">Copy to Clipboard</button>

@@ -52,6 +52,12 @@ class Users extends CI_Model
 		return $user;
    }
    
+   public function get_user_by_username( $username )
+   {
+		$result = $this->db->get_where('users', array('username' => $username))->result();
+		return $result[0];
+   }
+   
    public function get_username_by_email( $email ) {
 		$result = $this->db->get_where('users', array('email' => $email), 1)->result();
 		if(!empty($result)) {
@@ -128,6 +134,90 @@ class Users extends CI_Model
 		);
 		$this->db->where( 'id', $user_id );
 		$this->db->update( 'users', $arr );
+	}
+	
+	public function get_user_id_by_email( $email )
+	{
+		$this->db->select('id');
+		$this->db->from('users');
+		$this->db->where('email', $email);
+		$this->db->or_where('email_pref', $email);
+		$result = $this->db->get()->result();
+		return $result[0]->id;
+	}
+	
+	public function check_un_email_combo($username, $email)
+	{
+		$this->db->from('users');
+		$this->db->where('username', $username);
+		$this->db->where('(email = "' . $email . '" OR email_pref = "' . $email.'")');
+		return ($this->db->count_all_results() > 0);
+	}
+	
+	public function set_token( $user_id, $token )
+	{
+		$this->db->where('id', $user_id);
+		$this->db->update('users', array( 'token' => $token ));
+	}
+	
+	public function update_password( $post )
+	{
+		$this->db->where( array( 'id' => $post['id'], 'token' => $post['token'] ) );
+		$this->db->update('users', array( 'password' => sha1( $post['password'] ) ));
+	}
+	
+	public function check_token( $user_id, $token )
+	{
+		$this->db->from('users');
+		$this->db->where( array('id' => $user_id, 'token' => $token) );
+		return ($this->db->count_all_results() == 1);
+	}
+	
+	public function valid_login( $post )
+	{
+		$check = array(
+			'username' => $post['username'],
+			'password' => sha1($post['password'])
+		);
+		$this->db->from('users');
+		$this->db->where($check);
+		return ($this->db->count_all_results() == 1);
+	}
+	
+	public function log_in_user( $username )
+	{
+		$user = $this->get_user_by_username( $username );
+		// update last login
+		$this->db->where( array('id' => $user->id) );
+		$this->db->update( 'users', array('lastlogin' => time()) );
+		return $user;
+	}
+	
+	public function insert_user( $post )
+	{
+		$this->load->helper('string');
+		$token = random_string('sha1', 20);
+		$arr = array(
+			'username' => $post['username'],
+			'password' => sha1($post['password']),
+			'firstname' => $post['firstname'],
+			'lastname' => $post['lastname'],
+			'email' => $post['email'],
+			'email_pref' => $post['email_pref'],
+			'phone' => $post['phone'],
+			'class' => $post['class'],
+			'pending' => 'Y',
+			'token' => $token,
+			'created' => time()
+		);
+		$this->db->insert('users', $arr);
+		return $token;
+	}
+	
+	public function confirm( $post )
+	{
+		$this->db->where('id', $post['id']);
+		$this->db->update('users', array('pending' => 'N'));
 	}
 }
 ?>

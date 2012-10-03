@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head><title></title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><style type="text/css">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><style type="text/css">
 /* Mobile-specific Styles */
 @media only screen and (max-device-width: 480px) { 
 table[class=w0], td[class=w0] { width: 0 !important; }
@@ -89,6 +89,34 @@ body, td { font-family: 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif; 
 #footer a { color: #eeeeee; text-decoration: none; font-weight: bold; }
 #permission-reminder { white-space: normal; }
 #street-address { color: #ffffff; white-space: normal; }
+a.button {
+	border: 1px #BBBBBB solid;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	display: block;
+	width: 150px;
+	padding: 10px 15px;
+	color: #000;
+	font-family: Verdana, Tahoma, Arial, sans-serif;
+	font-size: 20px;
+	text-decoration: none;
+	background: rgb(255,255,255); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgb(255,255,255) 0%, rgb(229,229,229) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(255,255,255)), color-stop(100%,rgb(229,229,229))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgb(255,255,255) 0%,rgb(229,229,229) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgb(255,255,255) 0%,rgb(229,229,229) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgb(255,255,255) 0%,rgb(229,229,229) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgb(255,255,255) 0%,rgb(229,229,229) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+	cursor: pointer;
+	margin: 1em auto;
+	text-align: center;
+}
+a.button:hover {
+	border: 1px #AAA solid;
+	color: #CC0000;
+}
 </style>
 <!--[if gte mso 9]>
 <style _tmplitem="775" >
@@ -98,8 +126,17 @@ body, td { font-family: 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif; 
    list-style-position: inside;
 }
 </style>
-<![endif]--></head>
+<![endif]-->
+<title>E-mail Preview - Issue <?php echo $issue->id; ?></title>
+</head>
 <body>
+
+<?php if($this->session->flashdata('flash')) { ?>
+	<div style="padding: 1em; border: 1px #CC0000 dotted; background: #FFCCCC; color: #CC0000; font-weight: bold; text-align: center; width: 300px; margin: 0 auto;"><?php echo $this->session->flashdata('flash'); ?></div>
+<?php } ?>
+
+<?php echo anchor('admin/mme_emailsend/'.$issue->id, 'Send MME', 'class="button"'); ?>
+
 <table width="100%" cellpadding="0" cellspacing="0" border="0" id="background-table">
 	<tbody>
 		<tr>

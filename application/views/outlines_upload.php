@@ -1,4 +1,4 @@
-<p class="errors"><?php echo validation_errors(); ?></p>
+<?php if(validation_errors()) { ?><div class="errors"><?php echo validation_errors(); ?></div><?php } ?>
 <?php 
 	echo anchor('resources/outlines', 'Back to Outline Database', 'class="button top-right"');
 	

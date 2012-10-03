@@ -1,5 +1,15 @@
 <?php
 class MY_Controller extends CI_Controller {
+	var $email_config = array(
+		'protocol' => 'smtp',
+		'smtp_host' => 'ssl://smtp.googlemail.com',
+		'smtp_port' => 465,
+		'smtp_user' => 'ysquared86@gmail.com',
+		'smtp_pass' => 'asianinvasion',
+		'mailtype'  => 'html', 
+		'charset'   => 'iso-8859-1'
+	);
+	
 	public function __construct() {
 		parent::__construct();
 		$this->session->set_userdata('nav_items', $this->nav_items());
