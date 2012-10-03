@@ -3,7 +3,7 @@
 <p>All submissions will be added to the calendar.</p>
 <p>If you would like the MME to state that your submission is on behalf of an organization, you must be that organization's SGA Liaison. If you are not the SGA Liaison, you still may submit on behalf of your organization, but make sure you include your organization's name in the title and/or description.</p>
 
-<div class="errors"><?php echo validation_errors(); ?></div>
+<?php if(validation_errors()) { ?><div class="errors"><?php echo validation_errors(); ?></div><?php } ?>
 
 <?php
 	echo form_open('mme/submit', array( 'class' => 'sga-form' ) );

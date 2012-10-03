@@ -1,4 +1,4 @@
-<div class="errors"><?php echo validation_errors(); ?></div>
+<?php if(validation_errors()) { ?><div class="errors"><?php echo validation_errors(); ?></div><?php } ?>
 <?php
 	echo '<h2>'.$org->name.'</h2>';
 	echo 'Created ' . date('F d, Y', $org->created);

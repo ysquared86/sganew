@@ -372,6 +372,36 @@ class Mme_issues extends CI_Model {
 		return $result[0];
 	}
 	
+	public function fetch_submissions_wo_time()
+	{
+		$this->db->select('s.*, o.name');
+		$this->db->from('mme_submissions s');
+		$this->db->join('organizations o', 's.organization_id = o.id', 'left');
+		$this->db->where('s.starts IS NULL OR s.ends IS NULL');
+		return $this->db->get()->result();
+	}
+	
+	public function fetch_overrides( $issue_id )
+	{
+		$arr = array();
+		$this->db->select('mme_submission_id');
+		$this->db->from('mme_overrides');
+		$this->db->where('mme_issue_id', $issue_id);
+		foreach( $this->db->get()->result() as $row ) {
+			$arr[] = $row->mme_submission_id;
+		};
+		return $arr;
+	}
+	
+	public function add_overrides( $post, $issue_id )
+	{
+		$this->db->delete('mme_overrides', array('mme_issue_id' => $issue_id));
+		foreach($post['add_overrides'] as $submission_id)
+		{
+			$this->db->insert('mme_overrides', array('mme_issue_id' => $issue_id, 'mme_submission_id' => $submission_id));
+		}
+	}
+	
 	public function update_submission( $post )
 	{
 		if( isset($post['no_time']) && $post['no_time'] == 'Y' ) {

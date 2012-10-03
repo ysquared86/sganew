@@ -1,4 +1,4 @@
-<div class="errors"><?php echo validation_errors(); ?></div>
+<?php if(validation_errors()) { ?><div class="errors"><?php echo validation_errors(); ?></div><?php } ?>
 <?php
 	echo form_open('admin/manage_mmes/create', array( 'class' => 'sga-form' ));
 	
@@ -28,7 +28,7 @@
 		'value' => set_value('lastday')
 	);
 	echo form_input( $att );
-	
+	echo '<br />';
 	echo form_submit('submit', 'Create Issue');
 	echo form_close();
 ?>
