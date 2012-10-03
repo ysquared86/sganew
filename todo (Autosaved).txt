@@ -1,6 +1,10 @@
 + Liaisons
 	- Request SGA grant (not now)
 
+<<<<<<< HEAD
 + FAQs
 
 + Check CSS in chrome and IE
+=======
++ FAQs
+>>>>>>> origin/xps2

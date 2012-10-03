@@ -70,13 +70,19 @@ body {
     top: 0;
     width: 100%;
     z-index: 99;
+	*position: static;
 }
 	#header h1 { 
 		display: inline-block;
 		margin: 10px 0 0;
+		*display: block;
+		*float: left;
+		*width: 359px;
 	}
 	#header h1 a {
 		display: inline-block;
+		*display: block;
+		*float: left;
 		text-indent: -9999px;
 		width: 359px;
 		height: 47px;
@@ -132,6 +138,7 @@ body {
 	background: #FFF;
 	position: relative;
 	min-height: 400px;
+	*margin-top: 0;
 }
 
 #content-emailview {
@@ -147,6 +154,7 @@ body {
 	background: #000;
 	color: #FFF;
 	width: 100%;
+	*padding: 10px 0;
 }
 
 #footer.push {
@@ -161,12 +169,20 @@ body {
 	bottom: 0;
     display: inline-block;
     position: absolute;
+	*position: relative;
+	*left: 20px;
+	*top: 24px;
+	*float: left;
+	*display: block;
+	*z-index: 999;
 }
 	#header #nav ul { 
 		list-style: none; 
 	}
 	#header #nav ul > li {
 		display: inline-block;
+		*display: block;
+		*float: left;
 		width: auto;
 		position: relative;
 		background: #666;
@@ -195,6 +211,7 @@ body {
 		position: absolute;
 		left: 0;
 		top: 36px;
+		top: 40px\9;
 	}
 	#header #nav ul li:hover ul {
 		display: block;
